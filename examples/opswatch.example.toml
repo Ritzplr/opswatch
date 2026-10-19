@@ -1,0 +1,52 @@
+# opswatch example config. Copy it, edit it, then:
+#   opswatch validate -c opswatch.toml
+#   opswatch run -c opswatch.toml
+
+[settings]
+timeout = 5.0      # seconds per attempt
+retries = 2        # extra attempts for a failing check (waits 1s, then 2s)
+retry_delay = 1.0
+workers = 8        # checks run in parallel
+
+[[checks]]
+name = "Website"
+type = "http"
+url = "https://example.com"
+expect_status = 200
+contains = "Example Domain"
+latency_warn_ms = 1500
+cert_warn_days = 21      # WARN when the TLS certificate expires within 21 days
+
+[[checks]]
+name = "Database port"
+type = "tcp"
+host = "127.0.0.1"
+port = 5432
+
+[[checks]]
+name = "Data disk"
+type = "disk"
+path = "/"               # use "C:\\" on Windows
+warn_used_percent = 75
+max_used_percent = 90
+
+[[checks]]
+name = "Nightly database dump"
+type = "backup"
+path = "/var/backups/db"
+pattern = "*.sql.gz"
+max_age_hours = 26       # FAIL if the newest dump is older than this
+warn_age_hours = 20
+min_size_bytes = 1024    # FAIL if the newest dump is suspiciously small
+
+# Alerts. Secrets come from environment variables, never from this file.
+# [notify.email]
+# host = "smtp.example.com"
+# port = 587
+# username = "alerts@example.com"
+# password_env = "OPSWATCH_SMTP_PASSWORD"
+# from = "alerts@example.com"
+# to = ["oncall@example.com"]
+#
+# [notify.webhook]
+# url = "https://hooks.slack.com/services/XXX/YYY/ZZZ"

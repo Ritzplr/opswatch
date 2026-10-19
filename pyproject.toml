@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "opswatch"
+version = "0.1.0"
+description = "Hands-off health checks for small teams: HTTP, TLS expiry, TCP, disk and backup freshness, with change-only alerts."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Ritesh Kumar" }]
+keywords = ["monitoring", "devops", "health-check", "backups", "cloud"]
+dependencies = []
+
+[project.scripts]
+opswatch = "opswatch.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+opswatch = ["example.toml"]
